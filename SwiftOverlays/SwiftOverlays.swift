@@ -200,6 +200,7 @@ import UIKit
     open var blockerBackgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3)
     open var textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
     open var font = UIFont.systemFont(ofSize: 14)
+    open var activityIndicatorViewStyle = UIActivityIndicatorViewStyle.whiteLarge
     
     // Annoying notifications on top of status bar
     open var bannerDissapearAnimationDuration = 0.5
@@ -348,7 +349,7 @@ open class SwiftOverlays: NSObject {
     // MARK: Non-blocking
     @discardableResult
     open class func showCenteredWaitOverlay(_ parentView: UIView) -> UIView {
-        let ai = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        let ai = UIActivityIndicatorView(activityIndicatorStyle: SwiftOverlaysConfiguration.defaultConfiguration.activityIndicatorViewStyle)
         ai.startAnimating()
         
         let containerViewRect = CGRect(
@@ -384,7 +385,7 @@ open class SwiftOverlays: NSObject {
     
     @discardableResult
     open class func showCenteredWaitOverlayWithText(_ parentView: UIView, text: String) -> UIView  {
-        let ai = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        let ai = UIActivityIndicatorView(activityIndicatorStyle: SwiftOverlaysConfiguration.defaultConfiguration.activityIndicatorViewStyle)
         ai.startAnimating()
         
         return showGenericOverlay(parentView, text: text, accessoryView: ai)

@@ -189,68 +189,81 @@ open class SwiftOverlays: NSObject {
     // MARK: Blocking
     
     /**
-        Shows *blocking* wait overlay with activity indicator, centered in the app's main window
-    
-        - returns: Created overlay
-    */
-    @discardableResult
-    open class func showBlockingWaitOverlay() -> UIView {
-        let blocker = addMainWindowBlocker()
+     Shows *blocking* wait overlay with activity indicator, centered in the given window
+     
+     - parameter window: Window on top of which the wait overlay should be shown, if nil the wait overlay is shown on top of the key window
+     
+     - returns: Created overlay
+     */
+    @objc @discardableResult
+    open class func showBlockingWaitOverlay(_ window: UIWindow? = nil) -> UIView {
+        let visibleWindow = window != nil ? window! : UIWindow.visibleWindow()
+        let blocker = addWindowBlocker(visibleWindow)
         showCenteredWaitOverlay(blocker)
         
         return blocker
     }
     
     /**
-        Shows wait overlay with activity indicator *and text*, centered in the app's main window
-    
-        - parameter text: Text to be shown on overlay
-    
-        - returns: Created overlay
-    */
-    @discardableResult
-    open class func showBlockingWaitOverlayWithText(_ text: String) -> UIView {
-        let blocker = addMainWindowBlocker()
+     Shows wait overlay with activity indicator *and text*, centered in the given window
+     
+     - parameter text: Text to be shown on overlay
+     - parameter window: Window on top of which the wait overlay should be shown, if nil the wait overlay is shown on top of the key window
+     
+     - returns: Created overlay
+     */
+    @objc @discardableResult
+    open class func showBlockingWaitOverlayWithText(_ text: String, window: UIWindow? = nil) -> UIView {
+        let visibleWindow = window != nil ? window! : UIWindow.visibleWindow()
+        let blocker = addWindowBlocker(visibleWindow)
         showCenteredWaitOverlayWithText(blocker, text: text)
         
         return blocker
     }
     
     /**
-        Shows *blocking* overlay *with image and text*,, centered in the app's main window
-    
-        - parameter image: Image to be added to overlay
-        - parameter text: Text to be shown on overlay
-    
-        - returns: Created overlay
-    */
-    open class func showBlockingImageAndTextOverlay(_ image: UIImage, text: String) -> UIView  {
-        let blocker = addMainWindowBlocker()
+     Shows *blocking* overlay *with image and text*,, centered in the given window
+     
+     - parameter image: Image to be added to overlay
+     - parameter text: Text to be shown on overlay
+     - parameter window: Window on top of which the wait overlay should be shown, if nil the wait overlay is shown on top of the key window
+     
+     - returns: Created overlay
+     */
+    @objc @discardableResult
+    open class func showBlockingImageAndTextOverlay(_ image: UIImage, text: String, window: UIWindow? = nil) -> UIView  {
+        let visibleWindow = window != nil ? window! : UIWindow.visibleWindow()
+        let blocker = addWindowBlocker(visibleWindow)
         showImageAndTextOverlay(blocker, image: image, text: text)
         
         return blocker
     }
     
     /**
-        Shows *text-only* overlay, centered in the app's main window
-    
-        - parameter text: Text to be shown on overlay
-    
-        - returns: Created overlay
-    */
-    open class func showBlockingTextOverlay(_ text: String) -> UIView  {
-        let blocker = addMainWindowBlocker()
+     Shows *text-only* overlay, centered in the given window
+     
+     - parameter text: Text to be shown on overlay
+     - parameter window: Window on top of which the wait overlay should be shown, if nil the wait overlay is shown on top of the key window
+     
+     - returns: Created overlay
+     */
+    @objc @discardableResult
+    open class func showBlockingTextOverlay(_ text: String, window: UIWindow? = nil) -> UIView  {
+        let visibleWindow = window != nil ? window! : UIWindow.visibleWindow()
+        let blocker = addWindowBlocker(visibleWindow)
         showTextOverlay(blocker, text: text)
         
         return blocker
     }
     
     /**
-        Removes all *blocking* overlays from application's main window
-    */
-    open class func removeAllBlockingOverlays() {
-        let window = UIApplication.shared.delegate!.window!!
-        removeAllOverlaysFromView(window)
+     Removes all *blocking* overlays from the given window
+     
+     - parameter window: Window from which all *blocking* overlays should be removed, if nil all *blocking* overlays are removed from the key window
+     */
+    @objc open class func removeAllBlockingOverlays(_ window: UIWindow? = nil) {
+        let visibleWindow = window != nil ? window! : UIWindow.visibleWindow()
+        removeAllOverlaysFromView(visibleWindow)
     }
     
     // MARK: Non-blocking
@@ -487,32 +500,44 @@ open class SwiftOverlays: NSObject {
         return label
     }
     
-    fileprivate class func addMainWindowBlocker() -> UIView {
-        let window = UIApplication.shared.delegate!.window!!
-        
+    fileprivate class func addWindowBlocker(_ window: UIWindow) -> UIView {
         let blocker = UIView(frame: window.bounds)
         blocker.backgroundColor = backgroundColor
         blocker.tag = containerViewTag
         
         blocker.translatesAutoresizingMaskIntoConstraints = false
-
+        
         window.addSubview(blocker)
         
         let viewsDictionary = ["blocker": blocker]
         
         // Add constraints to handle orientation change
         let constraintsV = NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[blocker]-0-|",
-            options: [],
-            metrics: nil,
-            views: viewsDictionary)
+                                                          options: [],
+                                                          metrics: nil,
+                                                          views: viewsDictionary)
         
         let constraintsH = NSLayoutConstraint.constraints(withVisualFormat: "|-0-[blocker]-0-|",
-            options: [],
-            metrics: nil,
-            views: viewsDictionary)
+                                                          options: [],
+                                                          metrics: nil,
+                                                          views: viewsDictionary)
         
         window.addConstraints(constraintsV + constraintsH)
         
         return blocker
     }
+}
+
+internal extension UIWindow {
+    
+    static func visibleWindow() -> UIWindow {
+        var visibleWindow = UIApplication.shared.keyWindow
+        
+        if visibleWindow == nil {
+            visibleWindow = UIApplication.shared.delegate!.window!!
+        }
+        
+        return visibleWindow!
+    }
+    
 }

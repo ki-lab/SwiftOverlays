@@ -121,22 +121,33 @@ import UIKit
     }
 }
 
-open class SwiftOverlays: NSObject {
-    // You can customize these values
 
+@objc open class SwiftOverlaysConfiguration: NSObject {
+    
+    open static var defaultConfiguration: SwiftOverlaysConfiguration = SwiftOverlaysConfiguration()
+    
+    open var cornerRadius = CGFloat(10)
+    open var padding = CGFloat(10)
+    
+    open var backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
+    open var blockerBackgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3)
+    open var textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+    open var font = UIFont.systemFont(ofSize: 14)
+    
+    // Annoying notifications on top of status bar
+    open var bannerDissapearAnimationDuration = 0.5
+    
+    private override init() {
+        // Private initialization to ensure only one instance is created.
+    }
+}
+
+
+open class SwiftOverlays: NSObject {
+    
     // Some random number
     static let containerViewTag = 456987123
     
-    static let cornerRadius = CGFloat(10)
-    static let padding = CGFloat(10)
-    
-    static let backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
-    static let textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-    static let font = UIFont.systemFont(ofSize: 14)
-    
-    // Annoying notifications on top of status bar
-    static let bannerDissapearAnimationDuration = 0.5
-
     static var bannerWindow : UIWindow?
     
     open class Utils {
@@ -266,6 +277,7 @@ open class SwiftOverlays: NSObject {
         removeAllOverlaysFromView(visibleWindow)
     }
     
+    
     // MARK: Non-blocking
     @discardableResult
     open class func showCenteredWaitOverlay(_ parentView: UIView) -> UIView {
@@ -282,8 +294,8 @@ open class SwiftOverlays: NSObject {
         let containerView = UIView(frame: containerViewRect)
         
         containerView.tag = containerViewTag
-        containerView.layer.cornerRadius = cornerRadius
-        containerView.backgroundColor = backgroundColor
+        containerView.layer.cornerRadius = SwiftOverlaysConfiguration.defaultConfiguration.cornerRadius
+        containerView.backgroundColor = SwiftOverlaysConfiguration.defaultConfiguration.backgroundColor
         containerView.center = CGPoint(
             x: parentView.bounds.size.width/2,
             y: parentView.bounds.size.height/2
@@ -323,19 +335,19 @@ open class SwiftOverlays: NSObject {
         var actualSize = CGSize.zero
         
         if horizontalLayout {
-            actualSize = CGSize(width: accessoryView.frame.size.width + label.frame.size.width + padding * 3,
-                height: max(label.frame.size.height, accessoryView.frame.size.height) + padding * 2)
+            actualSize = CGSize(width: accessoryView.frame.size.width + label.frame.size.width + SwiftOverlaysConfiguration.defaultConfiguration.padding * 3,
+                                height: max(label.frame.size.height, accessoryView.frame.size.height) + SwiftOverlaysConfiguration.defaultConfiguration.padding * 2)
             
-            label.frame = label.frame.offsetBy(dx: accessoryView.frame.size.width + padding * 2, dy: padding)
+            label.frame = label.frame.offsetBy(dx: accessoryView.frame.size.width + SwiftOverlaysConfiguration.defaultConfiguration.padding * 2, dy: SwiftOverlaysConfiguration.defaultConfiguration.padding)
             
-            accessoryView.frame = accessoryView.frame.offsetBy(dx: padding, dy: (actualSize.height - accessoryView.frame.size.height)/2)
+            accessoryView.frame = accessoryView.frame.offsetBy(dx: SwiftOverlaysConfiguration.defaultConfiguration.padding, dy: (actualSize.height - accessoryView.frame.size.height)/2)
         } else {
-            actualSize = CGSize(width: max(accessoryView.frame.size.width, label.frame.size.width) + padding * 2,
-                height: label.frame.size.height + accessoryView.frame.size.height + padding * 3)
+            actualSize = CGSize(width: max(accessoryView.frame.size.width, label.frame.size.width) + SwiftOverlaysConfiguration.defaultConfiguration.padding * 2,
+                                height: label.frame.size.height + accessoryView.frame.size.height + SwiftOverlaysConfiguration.defaultConfiguration.padding * 3)
             
-            label.frame = label.frame.offsetBy(dx: padding, dy: accessoryView.frame.size.height + padding * 2)
+            label.frame = label.frame.offsetBy(dx: SwiftOverlaysConfiguration.defaultConfiguration.padding, dy: accessoryView.frame.size.height + SwiftOverlaysConfiguration.defaultConfiguration.padding * 2)
             
-            accessoryView.frame = accessoryView.frame.offsetBy(dx: (actualSize.width - accessoryView.frame.size.width)/2, dy: padding)
+            accessoryView.frame = accessoryView.frame.offsetBy(dx: (actualSize.width - accessoryView.frame.size.width)/2, dy: SwiftOverlaysConfiguration.defaultConfiguration.padding)
         }
         
         // Container view
@@ -343,8 +355,8 @@ open class SwiftOverlays: NSObject {
         let containerView = UIView(frame: containerViewRect)
      
         containerView.tag = containerViewTag
-        containerView.layer.cornerRadius = cornerRadius
-        containerView.backgroundColor = backgroundColor
+        containerView.layer.cornerRadius = SwiftOverlaysConfiguration.defaultConfiguration.cornerRadius
+        containerView.backgroundColor = SwiftOverlaysConfiguration.defaultConfiguration.backgroundColor
         containerView.center = CGPoint(
             x: parentView.bounds.size.width/2,
             y: parentView.bounds.size.height/2
@@ -363,18 +375,18 @@ open class SwiftOverlays: NSObject {
     @discardableResult
     open class func showTextOverlay(_ parentView: UIView, text: String) -> UIView  {
         let label = labelForText(text)
-        label.frame = label.frame.offsetBy(dx: padding, dy: padding)
+        label.frame = label.frame.offsetBy(dx: SwiftOverlaysConfiguration.defaultConfiguration.padding, dy: SwiftOverlaysConfiguration.defaultConfiguration.padding)
         
-        let actualSize = CGSize(width: label.frame.size.width + padding * 2,
-            height: label.frame.size.height + padding * 2)
+        let actualSize = CGSize(width: label.frame.size.width + SwiftOverlaysConfiguration.defaultConfiguration.padding * 2,
+                                height: label.frame.size.height + SwiftOverlaysConfiguration.defaultConfiguration.padding * 2)
         
         // Container view
         let containerViewRect = CGRect(origin: .zero, size: actualSize)
         let containerView = UIView(frame: containerViewRect)
         
         containerView.tag = containerViewTag
-        containerView.layer.cornerRadius = cornerRadius
-        containerView.backgroundColor = backgroundColor
+        containerView.layer.cornerRadius = SwiftOverlaysConfiguration.defaultConfiguration.cornerRadius
+        containerView.backgroundColor = SwiftOverlaysConfiguration.defaultConfiguration.backgroundColor
         containerView.center = CGPoint(
             x: parentView.bounds.size.width/2,
             y: parentView.bounds.size.height/2
@@ -446,7 +458,7 @@ open class SwiftOverlays: NSObject {
             bannerWindow!.layoutIfNeeded()
 
             // Show appearing animation, schedule calling closing selector after completed
-            UIView.animate(withDuration: bannerDissapearAnimationDuration, animations: { 
+            UIView.animate(withDuration: SwiftOverlaysConfiguration.defaultConfiguration.bannerDissapearAnimationDuration, animations: {
                 let frame = notificationView.frame
                 notificationView.frame = frame.offsetBy(dx: 0, dy: frame.height)
             }, completion: { (finished) in
@@ -472,28 +484,28 @@ open class SwiftOverlays: NSObject {
             return
         }
         
-        UIView.animate(withDuration: bannerDissapearAnimationDuration,
-            animations: { () -> Void in
-                let frame = notificationView.frame
-                notificationView.frame = frame.offsetBy(dx: 0, dy: -frame.height)
-            },
-            completion: { (finished) -> Void in
-                notificationView.removeFromSuperview()
-                bannerWindow?.isHidden = true
-            }
+        UIView.animate(withDuration: SwiftOverlaysConfiguration.defaultConfiguration.bannerDissapearAnimationDuration,
+                       animations: { () -> Void in
+                        let frame = notificationView.frame
+                        notificationView.frame = frame.offsetBy(dx: 0, dy: -frame.height)
+        },
+                       completion: { (finished) -> Void in
+                        notificationView.removeFromSuperview()
+                        bannerWindow?.isHidden = true
+        }
         )
     }
     
     // MARK: - Private class methods -
     
     fileprivate class func labelForText(_ text: String) -> UILabel {
-        let textSize = text.size(withAttributes: [NSAttributedStringKey.font: font])
+        let textSize = text.size(withAttributes: [NSAttributedStringKey.font: SwiftOverlaysConfiguration.defaultConfiguration.font])
         
         let labelRect = CGRect(origin: .zero, size: textSize)
 
         let label = UILabel(frame: labelRect)
-        label.font = font
-        label.textColor = textColor
+        label.font = SwiftOverlaysConfiguration.defaultConfiguration.font
+        label.textColor = SwiftOverlaysConfiguration.defaultConfiguration.textColor
         label.text = text
         label.numberOfLines = 0
         
@@ -502,7 +514,7 @@ open class SwiftOverlays: NSObject {
     
     fileprivate class func addWindowBlocker(_ window: UIWindow) -> UIView {
         let blocker = UIView(frame: window.bounds)
-        blocker.backgroundColor = backgroundColor
+        blocker.backgroundColor = SwiftOverlaysConfiguration.defaultConfiguration.blockerBackgroundColor
         blocker.tag = containerViewTag
         
         blocker.translatesAutoresizingMaskIntoConstraints = false

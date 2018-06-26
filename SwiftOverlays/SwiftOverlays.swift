@@ -22,7 +22,7 @@ import UIKit
      
         - returns: Created overlay
      */
-    @discardableResult
+    @objc @discardableResult
     func showBlockingWaitOverlay() -> UIView {
         return SwiftOverlays.showBlockingWaitOverlay(self.view.window)
     }
@@ -36,7 +36,7 @@ import UIKit
      
         - returns: Created overlay
      */
-    @discardableResult
+    @objc @discardableResult
     func showBlockingWaitOverlayWithText(_ text: String) -> UIView  {
         return SwiftOverlays.showBlockingWaitOverlayWithText(text, window: self.view.window)
     }
@@ -50,7 +50,7 @@ import UIKit
      
         - returns: Created overlay
      */
-    @discardableResult
+    @objc @discardableResult
     func showBlockingTextOverlay(_ text: String) -> UIView  {
         return SwiftOverlays.showBlockingTextOverlay(text, window: self.view.window)
     }
@@ -65,7 +65,7 @@ import UIKit
      
         - returns: Created overlay
      */
-    @discardableResult
+    @objc @discardableResult
     func showBlockingImageAndTextOverlay(_ image: UIImage, text: String) -> UIView  {
         return SwiftOverlays.showBlockingImageAndTextOverlay(image, text: text, window: self.view.window)
     }
@@ -73,7 +73,7 @@ import UIKit
     /**
         Removes all *blocking* overlays from view controller's main view
      */
-    func removeAllBlockingOverlays() {
+    @objc func removeAllBlockingOverlays() {
         SwiftOverlays.removeAllBlockingOverlays(self.view.window)
     }
     
@@ -87,7 +87,7 @@ import UIKit
     
         - returns: Created overlay
     */
-    @discardableResult
+    @objc @discardableResult
     func showWaitOverlay() -> UIView {
         return SwiftOverlays.showCenteredWaitOverlay(self.view)
     }
@@ -101,7 +101,7 @@ import UIKit
     
         - returns: Created overlay
     */
-    @discardableResult
+    @objc @discardableResult
     func showWaitOverlayWithText(_ text: String) -> UIView  {
         return SwiftOverlays.showCenteredWaitOverlayWithText(self.view, text: text)
     }
@@ -115,7 +115,7 @@ import UIKit
     
         - returns: Created overlay
     */
-    @discardableResult
+    @objc @discardableResult
     func showTextOverlay(_ text: String) -> UIView  {
         return SwiftOverlays.showTextOverlay(self.view, text: text)
     }
@@ -129,7 +129,7 @@ import UIKit
     
         - returns: Created overlay
     */
-    @discardableResult
+    @objc @discardableResult
     func showProgressOverlay(_ text: String) -> UIView  {
         return SwiftOverlays.showProgressOverlay(self.view, text: text)
     }
@@ -144,7 +144,7 @@ import UIKit
     
         - returns: Created overlay
     */
-    @discardableResult
+    @objc @discardableResult
     func showImageAndTextOverlay(_ image: UIImage, text: String) -> UIView  {
         return SwiftOverlays.showImageAndTextOverlay(self.view, image: image, text: text)
     }
@@ -163,7 +163,7 @@ import UIKit
     /**
         Removes all overlays from view controller's main view
     */
-    func removeAllOverlays() {
+    @objc func removeAllOverlays() {
         SwiftOverlays.removeAllOverlaysFromView(self.view)
     }
     
@@ -173,7 +173,7 @@ import UIKit
     
         - parameter text: Text to set
     */
-    func updateOverlayText(_ text: String) {
+    @objc func updateOverlayText(_ text: String) {
         SwiftOverlays.updateOverlayText(self.view, text: text)
     }
     
@@ -183,7 +183,7 @@ import UIKit
     
         - parameter progress: Progress to set 0.0 .. 1.0
     */
-    func updateOverlayProgress(_ progress: Float) {
+    @objc func updateOverlayProgress(_ progress: Float) {
         SwiftOverlays.updateOverlayProgress(self.view, progress: progress)
     }
 }

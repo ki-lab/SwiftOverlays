@@ -12,6 +12,73 @@ import UIKit
 
 // For convenience methods
 @objc public extension UIViewController {
+
+    // MARK: Blocking
+    
+    /**
+        Shows *blocking* wait overlay with activity indicator, centered in the view controller's main view
+     
+        Do not use this method for **UITableViewController** or **UICollectionViewController**
+     
+        - returns: Created overlay
+     */
+    @discardableResult
+    func showBlockingWaitOverlay() -> UIView {
+        return SwiftOverlays.showBlockingWaitOverlay(self.view.window)
+    }
+    
+    /**
+        Shows *blocking* wait overlay with activity indicator *and text*, centered in the view controller's main view
+     
+        Do not use this method for **UITableViewController** or **UICollectionViewController**
+     
+        - parameter text: Text to be shown on overlay
+     
+        - returns: Created overlay
+     */
+    @discardableResult
+    func showBlockingWaitOverlayWithText(_ text: String) -> UIView  {
+        return SwiftOverlays.showBlockingWaitOverlayWithText(text, window: self.view.window)
+    }
+    
+    /**
+        Shows *blocking text-only* overlay, centered in the view controller's main view
+     
+        Do not use this method for **UITableViewController** or **UICollectionViewController**
+     
+        - parameter text: Text to be shown on overlay
+     
+        - returns: Created overlay
+     */
+    @discardableResult
+    func showBlockingTextOverlay(_ text: String) -> UIView  {
+        return SwiftOverlays.showBlockingTextOverlay(text, window: self.view.window)
+    }
+    
+    /**
+        Shows *blocking* overlay *with image and text*, centered in the view controller's main view
+     
+        Do not use this method for **UITableViewController** or **UICollectionViewController**
+     
+        - parameter image: Image to be added to overlay
+        - parameter text: Text to be shown on overlay
+     
+        - returns: Created overlay
+     */
+    @discardableResult
+    func showBlockingImageAndTextOverlay(_ image: UIImage, text: String) -> UIView  {
+        return SwiftOverlays.showBlockingImageAndTextOverlay(image, text: text, window: self.view.window)
+    }
+    
+    /**
+        Removes all *blocking* overlays from view controller's main view
+     */
+    func removeAllBlockingOverlays() {
+        SwiftOverlays.removeAllBlockingOverlays(self.view.window)
+    }
+    
+    
+    // MARK: Non-blocking
     
     /**
         Shows wait overlay with activity indicator, centered in the view controller's main view

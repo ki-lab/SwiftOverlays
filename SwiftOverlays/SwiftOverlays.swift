@@ -194,12 +194,14 @@ import UIKit
     open static var defaultConfiguration: SwiftOverlaysConfiguration = SwiftOverlaysConfiguration()
     
     open var cornerRadius = CGFloat(10)
-    open var padding = CGFloat(10)
+    open var padding = CGFloat(20)
     
     open var backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
     open var blockerBackgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3)
     open var textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
     open var font = UIFont.systemFont(ofSize: 14)
+    open var textAlignment = NSTextAlignment.natural
+    open var lineBreakMode = NSLineBreakMode.byWordWrapping
     open var activityIndicatorViewStyle = UIActivityIndicatorViewStyle.whiteLarge
     
     // Annoying notifications on top of status bar
@@ -229,37 +231,66 @@ open class SwiftOverlays: NSObject {
         open static func centerViewInSuperview(_ view: UIView) {
             assert(view.superview != nil, "`view` should have a superview")
             
+            guard let superview = view.superview else {
+                return
+            }
+            
             view.translatesAutoresizingMaskIntoConstraints = false
             
-            let constraintH = NSLayoutConstraint(item: view,
-                attribute: NSLayoutAttribute.centerX,
-                relatedBy: NSLayoutRelation.equal,
-                toItem: view.superview,
-                attribute: NSLayoutAttribute.centerX,
-                multiplier: 1,
-                constant: 0)
-            let constraintV = NSLayoutConstraint(item: view,
-                attribute: NSLayoutAttribute.centerY,
-                relatedBy: NSLayoutRelation.equal,
-                toItem: view.superview,
-                attribute: NSLayoutAttribute.centerY,
-                multiplier: 1,
-                constant: 0)
-            let constraintWidth = NSLayoutConstraint(item: view,
-                attribute: NSLayoutAttribute.width,
-                relatedBy: NSLayoutRelation.equal,
-                toItem: nil,
-                attribute: NSLayoutAttribute.notAnAttribute,
-                multiplier: 1,
-                constant: view.frame.size.width)
-            let constraintHeight = NSLayoutConstraint(item: view,
-                attribute: NSLayoutAttribute.height,
-                relatedBy: NSLayoutRelation.equal,
-                toItem: nil,
-                attribute: NSLayoutAttribute.notAnAttribute,
-                multiplier: 1,
-                constant: view.frame.size.height)
-            view.superview!.addConstraints([constraintV, constraintH, constraintWidth, constraintHeight])
+            // Center X
+            superview.addConstraint(NSLayoutConstraint(item: view,
+                                                       attribute: NSLayoutAttribute.centerX,
+                                                       relatedBy: NSLayoutRelation.equal,
+                                                       toItem: superview,
+                                                       attribute: NSLayoutAttribute.centerX,
+                                                       multiplier: 1,
+                                                       constant: 0))
+            
+            // Center Y
+            superview.addConstraint(NSLayoutConstraint(item: view,
+                                                       attribute: NSLayoutAttribute.centerY,
+                                                       relatedBy: NSLayoutRelation.equal,
+                                                       toItem: superview,
+                                                       attribute: NSLayoutAttribute.centerY,
+                                                       multiplier: 1,
+                                                       constant: 0))
+            
+            // Leading
+            superview.addConstraint(NSLayoutConstraint(item: view,
+                                                       attribute: NSLayoutAttribute.leading,
+                                                       relatedBy: NSLayoutRelation.greaterThanOrEqual,
+                                                       toItem: superview,
+                                                       attribute: NSLayoutAttribute.leadingMargin,
+                                                       multiplier: 1,
+                                                       constant: 20))
+            
+            // Trailing
+            superview.addConstraint(NSLayoutConstraint(item: view,
+                                                       attribute: NSLayoutAttribute.trailing,
+                                                       relatedBy: NSLayoutRelation.lessThanOrEqual,
+                                                       toItem: superview,
+                                                       attribute: NSLayoutAttribute.trailingMargin,
+                                                       multiplier: 1,
+                                                       constant: 20))
+            
+            // Top
+            superview.addConstraint(NSLayoutConstraint(item: view,
+                                                       attribute: NSLayoutAttribute.top,
+                                                       relatedBy: NSLayoutRelation.greaterThanOrEqual,
+                                                       toItem: superview,
+                                                       attribute: NSLayoutAttribute.topMargin,
+                                                       multiplier: 1,
+                                                       constant: 100))
+            
+            // Bottom
+            superview.addConstraint(NSLayoutConstraint(item: view,
+                                                       attribute: NSLayoutAttribute.bottom,
+                                                       relatedBy: NSLayoutRelation.lessThanOrEqual,
+                                                       toItem: superview,
+                                                       attribute: NSLayoutAttribute.bottomMargin,
+                                                       multiplier: 1,
+                                                       constant: 100))
+            
         }
     }
     
@@ -349,35 +380,23 @@ open class SwiftOverlays: NSObject {
     // MARK: Non-blocking
     @discardableResult
     open class func showCenteredWaitOverlay(_ parentView: UIView) -> UIView {
-        let ai = UIActivityIndicatorView(activityIndicatorStyle: SwiftOverlaysConfiguration.defaultConfiguration.activityIndicatorViewStyle)
-        ai.startAnimating()
         
-        let containerViewRect = CGRect(
-            x: 0,
-            y: 0,
-            width: ai.frame.size.width * 2,
-            height: ai.frame.size.height * 2
-        )
+        let padding = SwiftOverlaysConfiguration.defaultConfiguration.padding
+        let containerView = self.containerView()
+        let activityIndicator = self.activityIndicator()
         
-        let containerView = UIView(frame: containerViewRect)
+        let viewsDictionary = ["activityIndicator": activityIndicator]
+        containerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-\(padding)-[activityIndicator]-\(padding)-|",
+                                                                   options: [],
+                                                                   metrics: nil,
+                                                                   views: viewsDictionary))
         
-        containerView.tag = containerViewTag
-        containerView.layer.cornerRadius = SwiftOverlaysConfiguration.defaultConfiguration.cornerRadius
-        containerView.backgroundColor = SwiftOverlaysConfiguration.defaultConfiguration.backgroundColor
-        containerView.center = CGPoint(
-            x: parentView.bounds.size.width/2,
-            y: parentView.bounds.size.height/2
-        )
-        
-        ai.center = CGPoint(
-            x: containerView.bounds.size.width/2,
-            y: containerView.bounds.size.height/2
-        )
-        
-        containerView.addSubview(ai)
+        containerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-\(padding)-[activityIndicator]-\(padding)-|",
+                                                                   options: [],
+                                                                   metrics: nil,
+                                                                   views: viewsDictionary))
         
         parentView.addSubview(containerView)
-        
         Utils.centerViewInSuperview(containerView)
         
         return containerView
@@ -385,56 +404,131 @@ open class SwiftOverlays: NSObject {
     
     @discardableResult
     open class func showCenteredWaitOverlayWithText(_ parentView: UIView, text: String) -> UIView  {
-        let ai = UIActivityIndicatorView(activityIndicatorStyle: SwiftOverlaysConfiguration.defaultConfiguration.activityIndicatorViewStyle)
-        ai.startAnimating()
-        
-        return showGenericOverlay(parentView, text: text, accessoryView: ai)
+        return showGenericOverlay(parentView, text: text, accessoryView: self.activityIndicator())
     }
     
     @discardableResult
     open class func showImageAndTextOverlay(_ parentView: UIView, image: UIImage, text: String) -> UIView  {
         let imageView = UIImageView(image: image)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         
         return showGenericOverlay(parentView, text: text, accessoryView: imageView)
     }
 
     open class func showGenericOverlay(_ parentView: UIView, text: String, accessoryView: UIView, horizontalLayout: Bool = true) -> UIView {
+        
+        let padding = SwiftOverlaysConfiguration.defaultConfiguration.padding
+        let containerView = self.containerView()
         let label = labelForText(text)
-        var actualSize = CGSize.zero
-        
-        if horizontalLayout {
-            actualSize = CGSize(width: accessoryView.frame.size.width + label.frame.size.width + SwiftOverlaysConfiguration.defaultConfiguration.padding * 3,
-                                height: max(label.frame.size.height, accessoryView.frame.size.height) + SwiftOverlaysConfiguration.defaultConfiguration.padding * 2)
-            
-            label.frame = label.frame.offsetBy(dx: accessoryView.frame.size.width + SwiftOverlaysConfiguration.defaultConfiguration.padding * 2, dy: SwiftOverlaysConfiguration.defaultConfiguration.padding)
-            
-            accessoryView.frame = accessoryView.frame.offsetBy(dx: SwiftOverlaysConfiguration.defaultConfiguration.padding, dy: (actualSize.height - accessoryView.frame.size.height)/2)
-        } else {
-            actualSize = CGSize(width: max(accessoryView.frame.size.width, label.frame.size.width) + SwiftOverlaysConfiguration.defaultConfiguration.padding * 2,
-                                height: label.frame.size.height + accessoryView.frame.size.height + SwiftOverlaysConfiguration.defaultConfiguration.padding * 3)
-            
-            label.frame = label.frame.offsetBy(dx: SwiftOverlaysConfiguration.defaultConfiguration.padding, dy: accessoryView.frame.size.height + SwiftOverlaysConfiguration.defaultConfiguration.padding * 2)
-            
-            accessoryView.frame = accessoryView.frame.offsetBy(dx: (actualSize.width - accessoryView.frame.size.width)/2, dy: SwiftOverlaysConfiguration.defaultConfiguration.padding)
-        }
-        
-        // Container view
-        let containerViewRect = CGRect(origin: .zero, size: actualSize)
-        let containerView = UIView(frame: containerViewRect)
-     
-        containerView.tag = containerViewTag
-        containerView.layer.cornerRadius = SwiftOverlaysConfiguration.defaultConfiguration.cornerRadius
-        containerView.backgroundColor = SwiftOverlaysConfiguration.defaultConfiguration.backgroundColor
-        containerView.center = CGPoint(
-            x: parentView.bounds.size.width/2,
-            y: parentView.bounds.size.height/2
-        )
-        
         containerView.addSubview(accessoryView)
         containerView.addSubview(label)
         
-        parentView.addSubview(containerView)
+        let viewsDictionary = ["accessoryView": accessoryView, "label": label]
         
+        if horizontalLayout {
+            
+            containerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-\(padding)-[accessoryView]-\(padding)-[label]-\(padding)-|",
+                options: [],
+                metrics: nil,
+                views: viewsDictionary))
+            
+            // Align accessoryView center with label center on the Y axis
+            containerView.addConstraint(NSLayoutConstraint(item: accessoryView,
+                                                           attribute: NSLayoutAttribute.centerY,
+                                                           relatedBy: NSLayoutRelation.equal,
+                                                           toItem: label,
+                                                           attribute: NSLayoutAttribute.centerY,
+                                                           multiplier: 1,
+                                                           constant: 0))
+            
+            // Top
+            containerView.addConstraint(NSLayoutConstraint(item: label,
+                                                           attribute: NSLayoutAttribute.top,
+                                                           relatedBy: NSLayoutRelation.greaterThanOrEqual,
+                                                           toItem: containerView,
+                                                           attribute: NSLayoutAttribute.top,
+                                                           multiplier: 1,
+                                                           constant: padding))
+            
+            containerView.addConstraint(NSLayoutConstraint(item: accessoryView,
+                                                           attribute: NSLayoutAttribute.top,
+                                                           relatedBy: NSLayoutRelation.greaterThanOrEqual,
+                                                           toItem: containerView,
+                                                           attribute: NSLayoutAttribute.top,
+                                                           multiplier: 1,
+                                                           constant: padding))
+            
+            // Bottom
+            containerView.addConstraint(NSLayoutConstraint(item: label,
+                                                           attribute: NSLayoutAttribute.bottom,
+                                                           relatedBy: NSLayoutRelation.lessThanOrEqual,
+                                                           toItem: containerView,
+                                                           attribute: NSLayoutAttribute.bottom,
+                                                           multiplier: 1,
+                                                           constant: -padding))
+            
+            containerView.addConstraint(NSLayoutConstraint(item: accessoryView,
+                                                           attribute: NSLayoutAttribute.bottom,
+                                                           relatedBy: NSLayoutRelation.lessThanOrEqual,
+                                                           toItem: containerView,
+                                                           attribute: NSLayoutAttribute.bottom,
+                                                           multiplier: 1,
+                                                           constant: -padding))
+
+        }
+        else {
+            
+            containerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-\(padding)-[accessoryView]-\(padding)-[label]-\(padding)-|",
+                options: [],
+                metrics: nil,
+                views: viewsDictionary))
+            
+            // Align accessoryView center with label center on the X axis
+            containerView.addConstraint(NSLayoutConstraint(item: accessoryView,
+                                                           attribute: NSLayoutAttribute.centerX,
+                                                           relatedBy: NSLayoutRelation.equal,
+                                                           toItem: label,
+                                                           attribute: NSLayoutAttribute.centerX,
+                                                           multiplier: 1,
+                                                           constant: 0))
+            
+            // Leading
+            containerView.addConstraint(NSLayoutConstraint(item: label,
+                                                           attribute: NSLayoutAttribute.leading,
+                                                           relatedBy: NSLayoutRelation.greaterThanOrEqual,
+                                                           toItem: containerView,
+                                                           attribute: NSLayoutAttribute.leading,
+                                                           multiplier: 1,
+                                                           constant: padding))
+            
+            containerView.addConstraint(NSLayoutConstraint(item: accessoryView,
+                                                           attribute: NSLayoutAttribute.leading,
+                                                           relatedBy: NSLayoutRelation.greaterThanOrEqual,
+                                                           toItem: containerView,
+                                                           attribute: NSLayoutAttribute.leading,
+                                                           multiplier: 1,
+                                                           constant: padding))
+            
+            // Trailing
+            containerView.addConstraint(NSLayoutConstraint(item: label,
+                                                           attribute: NSLayoutAttribute.trailing,
+                                                           relatedBy: NSLayoutRelation.lessThanOrEqual,
+                                                           toItem: containerView,
+                                                           attribute: NSLayoutAttribute.trailing,
+                                                           multiplier: 1,
+                                                           constant: -padding))
+            
+            containerView.addConstraint(NSLayoutConstraint(item: accessoryView,
+                                                           attribute: NSLayoutAttribute.trailing,
+                                                           relatedBy: NSLayoutRelation.lessThanOrEqual,
+                                                           toItem: containerView,
+                                                           attribute: NSLayoutAttribute.trailing,
+                                                           multiplier: 1,
+                                                           constant: -padding))
+        }
+        
+        
+        parentView.addSubview(containerView)
         Utils.centerViewInSuperview(containerView)
 
         return containerView
@@ -442,28 +536,25 @@ open class SwiftOverlays: NSObject {
     
     @discardableResult
     open class func showTextOverlay(_ parentView: UIView, text: String) -> UIView  {
-        let label = labelForText(text)
-        label.frame = label.frame.offsetBy(dx: SwiftOverlaysConfiguration.defaultConfiguration.padding, dy: SwiftOverlaysConfiguration.defaultConfiguration.padding)
-        
-        let actualSize = CGSize(width: label.frame.size.width + SwiftOverlaysConfiguration.defaultConfiguration.padding * 2,
-                                height: label.frame.size.height + SwiftOverlaysConfiguration.defaultConfiguration.padding * 2)
-        
-        // Container view
-        let containerViewRect = CGRect(origin: .zero, size: actualSize)
-        let containerView = UIView(frame: containerViewRect)
-        
-        containerView.tag = containerViewTag
-        containerView.layer.cornerRadius = SwiftOverlaysConfiguration.defaultConfiguration.cornerRadius
-        containerView.backgroundColor = SwiftOverlaysConfiguration.defaultConfiguration.backgroundColor
-        containerView.center = CGPoint(
-            x: parentView.bounds.size.width/2,
-            y: parentView.bounds.size.height/2
-        )
 
+        let padding = SwiftOverlaysConfiguration.defaultConfiguration.padding
+        let containerView = self.containerView()
+        
+        let label = self.labelForText(text)
         containerView.addSubview(label)
         
-        parentView.addSubview(containerView)
+        let viewsDictionary = ["label": label]
+        containerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-\(padding)-[label]-\(padding)-|",
+                                                                    options: [],
+                                                                    metrics: nil,
+                                                                    views: viewsDictionary))
         
+        containerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-\(padding)-[label]-\(padding)-|",
+                                                                    options: [],
+                                                                    metrics: nil,
+                                                                    views: viewsDictionary))
+        
+        parentView.addSubview(containerView)
         Utils.centerViewInSuperview(containerView)
 
         return containerView
@@ -546,36 +637,53 @@ open class SwiftOverlays: NSObject {
         
         if let recognizer = sender as? UITapGestureRecognizer {
             notificationView = recognizer.view!
-        } else if let view = sender as? UIView {
+        }
+        else if let view = sender as? UIView {
             notificationView = view
-        } else {
+        }
+        else {
             return
         }
         
         UIView.animate(withDuration: SwiftOverlaysConfiguration.defaultConfiguration.bannerDissapearAnimationDuration,
-                       animations: { () -> Void in
-                        let frame = notificationView.frame
-                        notificationView.frame = frame.offsetBy(dx: 0, dy: -frame.height)
-        },
-                       completion: { (finished) -> Void in
-                        notificationView.removeFromSuperview()
-                        bannerWindow?.isHidden = true
-        }
-        )
+                       animations: {
+                          let frame = notificationView.frame
+                          notificationView.frame = frame.offsetBy(dx: 0, dy: -frame.height)
+                       },
+                       completion: { finished in
+                          notificationView.removeFromSuperview()
+                          bannerWindow?.isHidden = true
+                       })
     }
     
     // MARK: - Private class methods -
     
+    fileprivate class func containerView() -> UIView {
+        let containerView = UIView()
+        containerView.tag = containerViewTag
+        containerView.layer.cornerRadius = SwiftOverlaysConfiguration.defaultConfiguration.cornerRadius
+        containerView.backgroundColor = SwiftOverlaysConfiguration.defaultConfiguration.backgroundColor
+        return containerView
+    }
+    
+    fileprivate class func activityIndicator() -> UIActivityIndicatorView {
+        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: SwiftOverlaysConfiguration.defaultConfiguration.activityIndicatorViewStyle)
+        activityIndicator.startAnimating()
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        return activityIndicator
+    }
+    
     fileprivate class func labelForText(_ text: String) -> UILabel {
-        let textSize = text.size(withAttributes: [NSAttributedStringKey.font: SwiftOverlaysConfiguration.defaultConfiguration.font])
-        
-        let labelRect = CGRect(origin: .zero, size: textSize)
-
-        let label = UILabel(frame: labelRect)
-        label.font = SwiftOverlaysConfiguration.defaultConfiguration.font
-        label.textColor = SwiftOverlaysConfiguration.defaultConfiguration.textColor
+        let label = UILabel()
         label.text = text
         label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = SwiftOverlaysConfiguration.defaultConfiguration.font
+        label.textColor = SwiftOverlaysConfiguration.defaultConfiguration.textColor
+        label.textAlignment = SwiftOverlaysConfiguration.defaultConfiguration.textAlignment
+        label.lineBreakMode = SwiftOverlaysConfiguration.defaultConfiguration.lineBreakMode
+        
+        label.sizeToFit()
         
         return label
     }

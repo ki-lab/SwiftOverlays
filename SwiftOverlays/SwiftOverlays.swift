@@ -191,7 +191,7 @@ import UIKit
 
 @objc open class SwiftOverlaysConfiguration: NSObject {
     
-    open static var defaultConfiguration: SwiftOverlaysConfiguration = SwiftOverlaysConfiguration()
+    public static var defaultConfiguration: SwiftOverlaysConfiguration = SwiftOverlaysConfiguration()
     
     open var cornerRadius = CGFloat(10)
     open var padding = CGFloat(20)
@@ -228,7 +228,7 @@ open class SwiftOverlays: NSObject {
         
             - parameter innerView: View to set constraints on
         */
-        open static func centerViewInSuperview(_ view: UIView) {
+        public static func centerViewInSuperview(_ view: UIView) {
             assert(view.superview != nil, "`view` should have a superview")
             
             guard let superview = view.superview else {

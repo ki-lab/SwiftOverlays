@@ -202,7 +202,7 @@ import UIKit
     open var font = UIFont.systemFont(ofSize: 14)
     open var textAlignment = NSTextAlignment.natural
     open var lineBreakMode = NSLineBreakMode.byWordWrapping
-    open var activityIndicatorViewStyle = UIActivityIndicatorViewStyle.whiteLarge
+    open var activityIndicatorViewStyle = UIActivityIndicatorView.Style.whiteLarge
     
     // Annoying notifications on top of status bar
     open var bannerDissapearAnimationDuration = 0.5
@@ -239,55 +239,55 @@ open class SwiftOverlays: NSObject {
             
             // Center X
             superview.addConstraint(NSLayoutConstraint(item: view,
-                                                       attribute: NSLayoutAttribute.centerX,
-                                                       relatedBy: NSLayoutRelation.equal,
+                                                       attribute: NSLayoutConstraint.Attribute.centerX,
+                                                       relatedBy: NSLayoutConstraint.Relation.equal,
                                                        toItem: superview,
-                                                       attribute: NSLayoutAttribute.centerX,
+                                                       attribute: NSLayoutConstraint.Attribute.centerX,
                                                        multiplier: 1,
                                                        constant: 0))
             
             // Center Y
             superview.addConstraint(NSLayoutConstraint(item: view,
-                                                       attribute: NSLayoutAttribute.centerY,
-                                                       relatedBy: NSLayoutRelation.equal,
+                                                       attribute: NSLayoutConstraint.Attribute.centerY,
+                                                       relatedBy: NSLayoutConstraint.Relation.equal,
                                                        toItem: superview,
-                                                       attribute: NSLayoutAttribute.centerY,
+                                                       attribute: NSLayoutConstraint.Attribute.centerY,
                                                        multiplier: 1,
                                                        constant: 0))
             
             // Leading
             superview.addConstraint(NSLayoutConstraint(item: view,
-                                                       attribute: NSLayoutAttribute.leading,
-                                                       relatedBy: NSLayoutRelation.greaterThanOrEqual,
+                                                       attribute: NSLayoutConstraint.Attribute.leading,
+                                                       relatedBy: NSLayoutConstraint.Relation.greaterThanOrEqual,
                                                        toItem: superview,
-                                                       attribute: NSLayoutAttribute.leadingMargin,
+                                                       attribute: NSLayoutConstraint.Attribute.leadingMargin,
                                                        multiplier: 1,
                                                        constant: 20))
             
             // Trailing
             superview.addConstraint(NSLayoutConstraint(item: view,
-                                                       attribute: NSLayoutAttribute.trailing,
-                                                       relatedBy: NSLayoutRelation.lessThanOrEqual,
+                                                       attribute: NSLayoutConstraint.Attribute.trailing,
+                                                       relatedBy: NSLayoutConstraint.Relation.lessThanOrEqual,
                                                        toItem: superview,
-                                                       attribute: NSLayoutAttribute.trailingMargin,
+                                                       attribute: NSLayoutConstraint.Attribute.trailingMargin,
                                                        multiplier: 1,
                                                        constant: 20))
             
             // Top
             superview.addConstraint(NSLayoutConstraint(item: view,
-                                                       attribute: NSLayoutAttribute.top,
-                                                       relatedBy: NSLayoutRelation.greaterThanOrEqual,
+                                                       attribute: NSLayoutConstraint.Attribute.top,
+                                                       relatedBy: NSLayoutConstraint.Relation.greaterThanOrEqual,
                                                        toItem: superview,
-                                                       attribute: NSLayoutAttribute.topMargin,
+                                                       attribute: NSLayoutConstraint.Attribute.topMargin,
                                                        multiplier: 1,
                                                        constant: 100))
             
             // Bottom
             superview.addConstraint(NSLayoutConstraint(item: view,
-                                                       attribute: NSLayoutAttribute.bottom,
-                                                       relatedBy: NSLayoutRelation.lessThanOrEqual,
+                                                       attribute: NSLayoutConstraint.Attribute.bottom,
+                                                       relatedBy: NSLayoutConstraint.Relation.lessThanOrEqual,
                                                        toItem: superview,
-                                                       attribute: NSLayoutAttribute.bottomMargin,
+                                                       attribute: NSLayoutConstraint.Attribute.bottomMargin,
                                                        multiplier: 1,
                                                        constant: 100))
             
@@ -434,44 +434,44 @@ open class SwiftOverlays: NSObject {
             
             // Align accessoryView center with label center on the Y axis
             containerView.addConstraint(NSLayoutConstraint(item: accessoryView,
-                                                           attribute: NSLayoutAttribute.centerY,
-                                                           relatedBy: NSLayoutRelation.equal,
+                                                           attribute: NSLayoutConstraint.Attribute.centerY,
+                                                           relatedBy: NSLayoutConstraint.Relation.equal,
                                                            toItem: label,
-                                                           attribute: NSLayoutAttribute.centerY,
+                                                           attribute: NSLayoutConstraint.Attribute.centerY,
                                                            multiplier: 1,
                                                            constant: 0))
             
             // Top
             containerView.addConstraint(NSLayoutConstraint(item: label,
-                                                           attribute: NSLayoutAttribute.top,
-                                                           relatedBy: NSLayoutRelation.greaterThanOrEqual,
+                                                           attribute: NSLayoutConstraint.Attribute.top,
+                                                           relatedBy: NSLayoutConstraint.Relation.greaterThanOrEqual,
                                                            toItem: containerView,
-                                                           attribute: NSLayoutAttribute.top,
+                                                           attribute: NSLayoutConstraint.Attribute.top,
                                                            multiplier: 1,
                                                            constant: padding))
             
             containerView.addConstraint(NSLayoutConstraint(item: accessoryView,
-                                                           attribute: NSLayoutAttribute.top,
-                                                           relatedBy: NSLayoutRelation.greaterThanOrEqual,
+                                                           attribute: NSLayoutConstraint.Attribute.top,
+                                                           relatedBy: NSLayoutConstraint.Relation.greaterThanOrEqual,
                                                            toItem: containerView,
-                                                           attribute: NSLayoutAttribute.top,
+                                                           attribute: NSLayoutConstraint.Attribute.top,
                                                            multiplier: 1,
                                                            constant: padding))
             
             // Bottom
             containerView.addConstraint(NSLayoutConstraint(item: label,
-                                                           attribute: NSLayoutAttribute.bottom,
-                                                           relatedBy: NSLayoutRelation.lessThanOrEqual,
+                                                           attribute: NSLayoutConstraint.Attribute.bottom,
+                                                           relatedBy: NSLayoutConstraint.Relation.lessThanOrEqual,
                                                            toItem: containerView,
-                                                           attribute: NSLayoutAttribute.bottom,
+                                                           attribute: NSLayoutConstraint.Attribute.bottom,
                                                            multiplier: 1,
                                                            constant: -padding))
             
             containerView.addConstraint(NSLayoutConstraint(item: accessoryView,
-                                                           attribute: NSLayoutAttribute.bottom,
-                                                           relatedBy: NSLayoutRelation.lessThanOrEqual,
+                                                           attribute: NSLayoutConstraint.Attribute.bottom,
+                                                           relatedBy: NSLayoutConstraint.Relation.lessThanOrEqual,
                                                            toItem: containerView,
-                                                           attribute: NSLayoutAttribute.bottom,
+                                                           attribute: NSLayoutConstraint.Attribute.bottom,
                                                            multiplier: 1,
                                                            constant: -padding))
 
@@ -485,44 +485,44 @@ open class SwiftOverlays: NSObject {
             
             // Align accessoryView center with label center on the X axis
             containerView.addConstraint(NSLayoutConstraint(item: accessoryView,
-                                                           attribute: NSLayoutAttribute.centerX,
-                                                           relatedBy: NSLayoutRelation.equal,
+                                                           attribute: NSLayoutConstraint.Attribute.centerX,
+                                                           relatedBy: NSLayoutConstraint.Relation.equal,
                                                            toItem: label,
-                                                           attribute: NSLayoutAttribute.centerX,
+                                                           attribute: NSLayoutConstraint.Attribute.centerX,
                                                            multiplier: 1,
                                                            constant: 0))
             
             // Leading
             containerView.addConstraint(NSLayoutConstraint(item: label,
-                                                           attribute: NSLayoutAttribute.leading,
-                                                           relatedBy: NSLayoutRelation.greaterThanOrEqual,
+                                                           attribute: NSLayoutConstraint.Attribute.leading,
+                                                           relatedBy: NSLayoutConstraint.Relation.greaterThanOrEqual,
                                                            toItem: containerView,
-                                                           attribute: NSLayoutAttribute.leading,
+                                                           attribute: NSLayoutConstraint.Attribute.leading,
                                                            multiplier: 1,
                                                            constant: padding))
             
             containerView.addConstraint(NSLayoutConstraint(item: accessoryView,
-                                                           attribute: NSLayoutAttribute.leading,
-                                                           relatedBy: NSLayoutRelation.greaterThanOrEqual,
+                                                           attribute: NSLayoutConstraint.Attribute.leading,
+                                                           relatedBy: NSLayoutConstraint.Relation.greaterThanOrEqual,
                                                            toItem: containerView,
-                                                           attribute: NSLayoutAttribute.leading,
+                                                           attribute: NSLayoutConstraint.Attribute.leading,
                                                            multiplier: 1,
                                                            constant: padding))
             
             // Trailing
             containerView.addConstraint(NSLayoutConstraint(item: label,
-                                                           attribute: NSLayoutAttribute.trailing,
-                                                           relatedBy: NSLayoutRelation.lessThanOrEqual,
+                                                           attribute: NSLayoutConstraint.Attribute.trailing,
+                                                           relatedBy: NSLayoutConstraint.Relation.lessThanOrEqual,
                                                            toItem: containerView,
-                                                           attribute: NSLayoutAttribute.trailing,
+                                                           attribute: NSLayoutConstraint.Attribute.trailing,
                                                            multiplier: 1,
                                                            constant: -padding))
             
             containerView.addConstraint(NSLayoutConstraint(item: accessoryView,
-                                                           attribute: NSLayoutAttribute.trailing,
-                                                           relatedBy: NSLayoutRelation.lessThanOrEqual,
+                                                           attribute: NSLayoutConstraint.Attribute.trailing,
+                                                           relatedBy: NSLayoutConstraint.Relation.lessThanOrEqual,
                                                            toItem: containerView,
-                                                           attribute: NSLayoutAttribute.trailing,
+                                                           attribute: NSLayoutConstraint.Attribute.trailing,
                                                            multiplier: 1,
                                                            constant: -padding))
         }
@@ -574,13 +574,13 @@ open class SwiftOverlays: NSObject {
     
     open class func updateOverlayText(_ parentView: UIView, text: String) {
         if let overlay = parentView.viewWithTag(containerViewTag) {
-            overlay.subviews.flatMap { $0 as? UILabel }.first?.text = text
+            overlay.subviews.compactMap { $0 as? UILabel }.first?.text = text
         }
     }
     
     open class func updateOverlayProgress(_ parentView: UIView, progress: Float) {
         if let overlay = parentView.viewWithTag(containerViewTag) {
-            overlay.subviews.flatMap { $0 as? UIProgressView }.first?.progress = progress
+            overlay.subviews.compactMap { $0 as? UIProgressView }.first?.progress = progress
         }
     }
     
@@ -589,7 +589,7 @@ open class SwiftOverlays: NSObject {
     open class func showOnTopOfStatusBar(_ notificationView: UIView, duration: TimeInterval, animated: Bool = true) {
         if bannerWindow == nil {
             bannerWindow = UIWindow()
-            bannerWindow!.windowLevel = UIWindowLevelStatusBar + 1
+            bannerWindow!.windowLevel = UIWindow.Level.statusBar + 1
             bannerWindow!.backgroundColor = UIColor.clear
         }
 
@@ -667,7 +667,7 @@ open class SwiftOverlays: NSObject {
     }
     
     fileprivate class func activityIndicator() -> UIActivityIndicatorView {
-        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: SwiftOverlaysConfiguration.defaultConfiguration.activityIndicatorViewStyle)
+        let activityIndicator = UIActivityIndicatorView(style: SwiftOverlaysConfiguration.defaultConfiguration.activityIndicatorViewStyle)
         activityIndicator.startAnimating()
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         return activityIndicator

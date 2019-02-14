@@ -384,6 +384,7 @@ open class SwiftOverlays: NSObject {
         let padding = SwiftOverlaysConfiguration.defaultConfiguration.padding
         let containerView = self.containerView()
         let activityIndicator = self.activityIndicator()
+        containerView.addSubview(activityIndicator)
         
         let viewsDictionary = ["activityIndicator": activityIndicator]
         containerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-\(padding)-[activityIndicator]-\(padding)-|",

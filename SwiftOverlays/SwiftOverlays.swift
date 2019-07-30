@@ -12,177 +12,184 @@ import UIKit
 
 // For convenience methods
 @objc public extension UIViewController {
-
+    
+    private var superview: UIView {
+        if let parent = self.parent {
+            return parent.superview
+        }
+        return self.view
+    }
+    
     // MARK: Blocking
     
     /**
-        Shows *blocking* wait overlay with activity indicator, centered in the view controller's main view
+     Shows *blocking* wait overlay with activity indicator, centered in the view controller's main view
      
-        Do not use this method for **UITableViewController** or **UICollectionViewController**
+     Do not use this method for **UITableViewController** or **UICollectionViewController**
      
-        - returns: Created overlay
+     - returns: Created overlay
      */
     @objc @discardableResult
     func showBlockingWaitOverlay() -> UIView {
-        return SwiftOverlays.showBlockingWaitOverlay(self.view.window)
+        return SwiftOverlays.showBlockingWaitOverlay(self.superview)
     }
     
     /**
-        Shows *blocking* wait overlay with activity indicator *and text*, centered in the view controller's main view
+     Shows *blocking* wait overlay with activity indicator *and text*, centered in the view controller's main view
      
-        Do not use this method for **UITableViewController** or **UICollectionViewController**
+     Do not use this method for **UITableViewController** or **UICollectionViewController**
      
-        - parameter text: Text to be shown on overlay
+     - parameter text: Text to be shown on overlay
      
-        - returns: Created overlay
+     - returns: Created overlay
      */
     @objc @discardableResult
     func showBlockingWaitOverlayWithText(_ text: String) -> UIView  {
-        return SwiftOverlays.showBlockingWaitOverlayWithText(text, window: self.view.window)
+        return SwiftOverlays.showBlockingWaitOverlayWithText(text, view: superview)
     }
     
     /**
-        Shows *blocking text-only* overlay, centered in the view controller's main view
+     Shows *blocking text-only* overlay, centered in the view controller's main view
      
-        Do not use this method for **UITableViewController** or **UICollectionViewController**
+     Do not use this method for **UITableViewController** or **UICollectionViewController**
      
-        - parameter text: Text to be shown on overlay
+     - parameter text: Text to be shown on overlay
      
-        - returns: Created overlay
+     - returns: Created overlay
      */
     @objc @discardableResult
     func showBlockingTextOverlay(_ text: String) -> UIView  {
-        return SwiftOverlays.showBlockingTextOverlay(text, window: self.view.window)
+        return SwiftOverlays.showBlockingTextOverlay(text, view: superview)
     }
     
     /**
-        Shows *blocking* overlay *with image and text*, centered in the view controller's main view
+     Shows *blocking* overlay *with image and text*, centered in the view controller's main view
      
-        Do not use this method for **UITableViewController** or **UICollectionViewController**
+     Do not use this method for **UITableViewController** or **UICollectionViewController**
      
-        - parameter image: Image to be added to overlay
-        - parameter text: Text to be shown on overlay
+     - parameter image: Image to be added to overlay
+     - parameter text: Text to be shown on overlay
      
-        - returns: Created overlay
+     - returns: Created overlay
      */
     @objc @discardableResult
     func showBlockingImageAndTextOverlay(_ image: UIImage, text: String) -> UIView  {
-        return SwiftOverlays.showBlockingImageAndTextOverlay(image, text: text, window: self.view.window)
+        return SwiftOverlays.showBlockingImageAndTextOverlay(image, text: text, view: superview)
     }
     
     /**
-        Removes all *blocking* overlays from view controller's main view
+     Removes all *blocking* overlays from view controller's main view
      */
     @objc func removeAllBlockingOverlays() {
-        SwiftOverlays.removeAllBlockingOverlays(self.view.window)
+        SwiftOverlays.removeAllBlockingOverlays(superview)
     }
     
     
     // MARK: Non-blocking
     
     /**
-        Shows wait overlay with activity indicator, centered in the view controller's main view
-    
-        Do not use this method for **UITableViewController** or **UICollectionViewController**
-    
-        - returns: Created overlay
-    */
+     Shows wait overlay with activity indicator, centered in the view controller's main view
+     
+     Do not use this method for **UITableViewController** or **UICollectionViewController**
+     
+     - returns: Created overlay
+     */
     @objc @discardableResult
     func showWaitOverlay() -> UIView {
         return SwiftOverlays.showCenteredWaitOverlay(self.view)
     }
     
     /**
-        Shows wait overlay with activity indicator *and text*, centered in the view controller's main view
-        
-        Do not use this method for **UITableViewController** or **UICollectionViewController**
-        
-        - parameter text: Text to be shown on overlay
-    
-        - returns: Created overlay
-    */
+     Shows wait overlay with activity indicator *and text*, centered in the view controller's main view
+     
+     Do not use this method for **UITableViewController** or **UICollectionViewController**
+     
+     - parameter text: Text to be shown on overlay
+     
+     - returns: Created overlay
+     */
     @objc @discardableResult
     func showWaitOverlayWithText(_ text: String) -> UIView  {
         return SwiftOverlays.showCenteredWaitOverlayWithText(self.view, text: text)
     }
     
     /**
-        Shows *text-only* overlay, centered in the view controller's main view
-        
-        Do not use this method for **UITableViewController** or **UICollectionViewController**
-        
-        - parameter text: Text to be shown on overlay
-    
-        - returns: Created overlay
-    */
+     Shows *text-only* overlay, centered in the view controller's main view
+     
+     Do not use this method for **UITableViewController** or **UICollectionViewController**
+     
+     - parameter text: Text to be shown on overlay
+     
+     - returns: Created overlay
+     */
     @objc @discardableResult
     func showTextOverlay(_ text: String) -> UIView  {
         return SwiftOverlays.showTextOverlay(self.view, text: text)
     }
     
     /**
-        Shows overlay with text and progress bar, centered in the view controller's main view
-        
-        Do not use this method for **UITableViewController** or **UICollectionViewController**
-        
-        - parameter text: Text to be shown on overlay
-    
-        - returns: Created overlay
-    */
+     Shows overlay with text and progress bar, centered in the view controller's main view
+     
+     Do not use this method for **UITableViewController** or **UICollectionViewController**
+     
+     - parameter text: Text to be shown on overlay
+     
+     - returns: Created overlay
+     */
     @objc @discardableResult
     func showProgressOverlay(_ text: String) -> UIView  {
         return SwiftOverlays.showProgressOverlay(self.view, text: text)
     }
     
     /**
-        Shows overlay *with image and text*, centered in the view controller's main view
-        
-        Do not use this method for **UITableViewController** or **UICollectionViewController**
-        
-        - parameter image: Image to be added to overlay
-        - parameter text: Text to be shown on overlay
-    
-        - returns: Created overlay
-    */
+     Shows overlay *with image and text*, centered in the view controller's main view
+     
+     Do not use this method for **UITableViewController** or **UICollectionViewController**
+     
+     - parameter image: Image to be added to overlay
+     - parameter text: Text to be shown on overlay
+     
+     - returns: Created overlay
+     */
     @objc @discardableResult
     func showImageAndTextOverlay(_ image: UIImage, text: String) -> UIView  {
         return SwiftOverlays.showImageAndTextOverlay(self.view, image: image, text: text)
     }
     
     /**
-        Shows notification on top of the status bar, similar to native local or remote notifications
-
-        - parameter notificationView: View that will be shown as notification
-        - parameter duration: Amount of time until notification disappears
-        - parameter animated: Should appearing be animated
-    */
+     Shows notification on top of the status bar, similar to native local or remote notifications
+     
+     - parameter notificationView: View that will be shown as notification
+     - parameter duration: Amount of time until notification disappears
+     - parameter animated: Should appearing be animated
+     */
     class func showOnTopOfStatusBar(_ notificationView: UIView, duration: TimeInterval, animated: Bool = true) {
         SwiftOverlays.showOnTopOfStatusBar(notificationView, duration: duration, animated: animated)
     }
     
     /**
-        Removes all overlays from view controller's main view
-    */
+     Removes all overlays from view controller's main view
+     */
     @objc func removeAllOverlays() {
         SwiftOverlays.removeAllOverlaysFromView(self.view)
     }
     
     /**
-        Updates text on the current overlay.
-        Does nothing if no overlay is present.
-    
-        - parameter text: Text to set
-    */
+     Updates text on the current overlay.
+     Does nothing if no overlay is present.
+     
+     - parameter text: Text to set
+     */
     @objc func updateOverlayText(_ text: String) {
         SwiftOverlays.updateOverlayText(self.view, text: text)
     }
     
     /**
-        Updates progress on the current overlay.
-        Does nothing if no overlay is present.
-    
-        - parameter progress: Progress to set 0.0 .. 1.0
-    */
+     Updates progress on the current overlay.
+     Does nothing if no overlay is present.
+     
+     - parameter progress: Progress to set 0.0 .. 1.0
+     */
     @objc func updateOverlayProgress(_ progress: Float) {
         SwiftOverlays.updateOverlayProgress(self.view, progress: progress)
     }
@@ -223,11 +230,11 @@ open class SwiftOverlays: NSObject {
     open class Utils {
         
         /**
-            Adds autolayout constraints to innerView to center it in its superview and fix its size.
-            `innerView` should have a superview.
-        
-            - parameter innerView: View to set constraints on
-        */
+         Adds autolayout constraints to innerView to center it in its superview and fix its size.
+         `innerView` should have a superview.
+         
+         - parameter innerView: View to set constraints on
+         */
         public static func centerViewInSuperview(_ view: UIView) {
             assert(view.superview != nil, "`view` should have a superview")
             
@@ -301,14 +308,13 @@ open class SwiftOverlays: NSObject {
     /**
      Shows *blocking* wait overlay with activity indicator, centered in the given window
      
-     - parameter window: Window on top of which the wait overlay should be shown, if nil the wait overlay is shown on top of the key window
+     - parameter view: View on top of which the wait overlay should be shown
      
      - returns: Created overlay
      */
     @objc @discardableResult
-    open class func showBlockingWaitOverlay(_ window: UIWindow? = nil) -> UIView {
-        let visibleWindow = window != nil ? window! : UIWindow.visibleWindow()
-        let blocker = addWindowBlocker(visibleWindow)
+    open class func showBlockingWaitOverlay(_ view: UIView) -> UIView {
+        let blocker = addViewBlocker(onTopOf: view)
         showCenteredWaitOverlay(blocker)
         
         return blocker
@@ -318,16 +324,14 @@ open class SwiftOverlays: NSObject {
      Shows wait overlay with activity indicator *and text*, centered in the given window
      
      - parameter text: Text to be shown on overlay
-     - parameter window: Window on top of which the wait overlay should be shown, if nil the wait overlay is shown on top of the key window
+     - parameter view: View on top of which the wait overlay should be shown
      
      - returns: Created overlay
      */
     @objc @discardableResult
-    open class func showBlockingWaitOverlayWithText(_ text: String, window: UIWindow? = nil) -> UIView {
-        let visibleWindow = window != nil ? window! : UIWindow.visibleWindow()
-        let blocker = addWindowBlocker(visibleWindow)
+    open class func showBlockingWaitOverlayWithText(_ text: String, view: UIView) -> UIView {
+        let blocker = addViewBlocker(onTopOf: view)
         showCenteredWaitOverlayWithText(blocker, text: text)
-        
         return blocker
     }
     
@@ -336,16 +340,14 @@ open class SwiftOverlays: NSObject {
      
      - parameter image: Image to be added to overlay
      - parameter text: Text to be shown on overlay
-     - parameter window: Window on top of which the wait overlay should be shown, if nil the wait overlay is shown on top of the key window
+     - parameter view: View on top of which the wait overlay should be shown
      
      - returns: Created overlay
      */
     @objc @discardableResult
-    open class func showBlockingImageAndTextOverlay(_ image: UIImage, text: String, window: UIWindow? = nil) -> UIView  {
-        let visibleWindow = window != nil ? window! : UIWindow.visibleWindow()
-        let blocker = addWindowBlocker(visibleWindow)
+    open class func showBlockingImageAndTextOverlay(_ image: UIImage, text: String, view: UIView) -> UIView  {
+        let blocker = addViewBlocker(onTopOf: view)
         showImageAndTextOverlay(blocker, image: image, text: text)
-        
         return blocker
     }
     
@@ -353,27 +355,24 @@ open class SwiftOverlays: NSObject {
      Shows *text-only* overlay, centered in the given window
      
      - parameter text: Text to be shown on overlay
-     - parameter window: Window on top of which the wait overlay should be shown, if nil the wait overlay is shown on top of the key window
+     - parameter view: View on top of which the wait overlay should be shown
      
      - returns: Created overlay
      */
     @objc @discardableResult
-    open class func showBlockingTextOverlay(_ text: String, window: UIWindow? = nil) -> UIView  {
-        let visibleWindow = window != nil ? window! : UIWindow.visibleWindow()
-        let blocker = addWindowBlocker(visibleWindow)
+    open class func showBlockingTextOverlay(_ text: String, view: UIView) -> UIView  {
+        let blocker = addViewBlocker(onTopOf: view)
         showTextOverlay(blocker, text: text)
-        
         return blocker
     }
     
     /**
      Removes all *blocking* overlays from the given window
      
-     - parameter window: Window from which all *blocking* overlays should be removed, if nil all *blocking* overlays are removed from the key window
+     - parameter view: View from which all *blocking* overlays should be removed
      */
-    @objc open class func removeAllBlockingOverlays(_ window: UIWindow? = nil) {
-        let visibleWindow = window != nil ? window! : UIWindow.visibleWindow()
-        removeAllOverlaysFromView(visibleWindow)
+    @objc open class func removeAllBlockingOverlays(_ view: UIView) {
+        removeAllOverlaysFromView(view)
     }
     
     
@@ -388,14 +387,14 @@ open class SwiftOverlays: NSObject {
         
         let viewsDictionary = ["activityIndicator": activityIndicator]
         containerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-\(padding)-[activityIndicator]-\(padding)-|",
-                                                                   options: [],
-                                                                   metrics: nil,
-                                                                   views: viewsDictionary))
+            options: [],
+            metrics: nil,
+            views: viewsDictionary))
         
         containerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-\(padding)-[activityIndicator]-\(padding)-|",
-                                                                   options: [],
-                                                                   metrics: nil,
-                                                                   views: viewsDictionary))
+            options: [],
+            metrics: nil,
+            views: viewsDictionary))
         
         parentView.addSubview(containerView)
         Utils.centerViewInSuperview(containerView)
@@ -415,7 +414,7 @@ open class SwiftOverlays: NSObject {
         
         return showGenericOverlay(parentView, text: text, accessoryView: imageView)
     }
-
+    
     open class func showGenericOverlay(_ parentView: UIView, text: String, accessoryView: UIView, horizontalLayout: Bool = true) -> UIView {
         
         let padding = SwiftOverlaysConfiguration.defaultConfiguration.padding
@@ -475,7 +474,7 @@ open class SwiftOverlays: NSObject {
                                                            attribute: NSLayoutConstraint.Attribute.bottom,
                                                            multiplier: 1,
                                                            constant: -padding))
-
+            
         }
         else {
             
@@ -531,13 +530,13 @@ open class SwiftOverlays: NSObject {
         
         parentView.addSubview(containerView)
         Utils.centerViewInSuperview(containerView)
-
+        
         return containerView
     }
     
     @discardableResult
     open class func showTextOverlay(_ parentView: UIView, text: String) -> UIView  {
-
+        
         let padding = SwiftOverlaysConfiguration.defaultConfiguration.padding
         let containerView = self.containerView()
         
@@ -546,18 +545,18 @@ open class SwiftOverlays: NSObject {
         
         let viewsDictionary = ["label": label]
         containerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-\(padding)-[label]-\(padding)-|",
-                                                                    options: [],
-                                                                    metrics: nil,
-                                                                    views: viewsDictionary))
+            options: [],
+            metrics: nil,
+            views: viewsDictionary))
         
         containerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-\(padding)-[label]-\(padding)-|",
-                                                                    options: [],
-                                                                    metrics: nil,
-                                                                    views: viewsDictionary))
+            options: [],
+            metrics: nil,
+            views: viewsDictionary))
         
         parentView.addSubview(containerView)
         Utils.centerViewInSuperview(containerView)
-
+        
         return containerView
     }
     
@@ -593,17 +592,17 @@ open class SwiftOverlays: NSObject {
             bannerWindow!.windowLevel = UIWindow.Level.statusBar + 1
             bannerWindow!.backgroundColor = UIColor.clear
         }
-
+        
         // TODO: use autolayout instead
         // Ugly, but works
         let topHeight = UIApplication.shared.statusBarFrame.size.height
             + UINavigationController().navigationBar.frame.height
-
+        
         let height = max(topHeight, 64)
         let width = UIScreen.main.bounds.width
-
+        
         let frame = CGRect(x: 0, y: 0, width: width, height: height)
-
+        
         bannerWindow!.frame = frame
         bannerWindow!.isHidden = false
         
@@ -612,11 +611,11 @@ open class SwiftOverlays: NSObject {
         notificationView.addGestureRecognizer(gestureRecognizer)
         
         bannerWindow!.addSubview(notificationView)
-
+        
         if animated {
             notificationView.frame = frame.offsetBy(dx: 0, dy: -frame.height)
             bannerWindow!.layoutIfNeeded()
-
+            
             // Show appearing animation, schedule calling closing selector after completed
             UIView.animate(withDuration: SwiftOverlaysConfiguration.defaultConfiguration.bannerDissapearAnimationDuration, animations: {
                 let frame = notificationView.frame
@@ -633,7 +632,7 @@ open class SwiftOverlays: NSObject {
     
     @objc open class func closeNotificationOnTopOfStatusBar(_ sender: AnyObject) {
         NSObject.cancelPreviousPerformRequests(withTarget: self)
-    
+        
         let notificationView: UIView
         
         if let recognizer = sender as? UITapGestureRecognizer {
@@ -648,13 +647,13 @@ open class SwiftOverlays: NSObject {
         
         UIView.animate(withDuration: SwiftOverlaysConfiguration.defaultConfiguration.bannerDissapearAnimationDuration,
                        animations: {
-                          let frame = notificationView.frame
-                          notificationView.frame = frame.offsetBy(dx: 0, dy: -frame.height)
-                       },
+                        let frame = notificationView.frame
+                        notificationView.frame = frame.offsetBy(dx: 0, dy: -frame.height)
+        },
                        completion: { finished in
-                          notificationView.removeFromSuperview()
-                          bannerWindow?.isHidden = true
-                       })
+                        notificationView.removeFromSuperview()
+                        bannerWindow?.isHidden = true
+        })
     }
     
     // MARK: - Private class methods -
@@ -689,14 +688,14 @@ open class SwiftOverlays: NSObject {
         return label
     }
     
-    fileprivate class func addWindowBlocker(_ window: UIWindow) -> UIView {
-        let blocker = UIView(frame: window.bounds)
+    fileprivate class func addViewBlocker(onTopOf view: UIView) -> UIView {
+        let blocker = UIView(frame: view.bounds)
         blocker.backgroundColor = SwiftOverlaysConfiguration.defaultConfiguration.blockerBackgroundColor
         blocker.tag = containerViewTag
         
         blocker.translatesAutoresizingMaskIntoConstraints = false
         
-        window.addSubview(blocker)
+        view.addSubview(blocker)
         
         let viewsDictionary = ["blocker": blocker]
         
@@ -711,22 +710,8 @@ open class SwiftOverlays: NSObject {
                                                           metrics: nil,
                                                           views: viewsDictionary)
         
-        window.addConstraints(constraintsV + constraintsH)
+        view.addConstraints(constraintsV + constraintsH)
         
         return blocker
     }
-}
-
-internal extension UIWindow {
-    
-    static func visibleWindow() -> UIWindow {
-        var visibleWindow = UIApplication.shared.keyWindow
-        
-        if visibleWindow == nil {
-            visibleWindow = UIApplication.shared.delegate!.window!!
-        }
-        
-        return visibleWindow!
-    }
-    
 }
